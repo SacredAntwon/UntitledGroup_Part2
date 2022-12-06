@@ -22,10 +22,10 @@ This version will include bug fixes, improvements, and unit testing.
 
 # Usage
 
-`python ./anime.py --number_of_recs <number> --anime_id <id number> --in_list <input file name> --out_list <output file name>`
+`python ./anime.py --number_of_recs <number> --anime_title <title name> --in_list <input file name> --out_list <output file name>`
 
 - number_of_recs is optional, it changes the number of recommendations you may want for each anime
-- anime_id is NOT optional, this is the id of the anime you want recommendations for
+- anime_title is NOT optional, this is the id of the anime you want recommendations for
 - in_list is optional, this is a txt file with multiple ids of animes that you want recommendations for
   > The format of the txt file should be the ids followed by a space e.g. "id id id" _or_ one id per line
 - out_list is optional, this is a txt file that you may want your recommendations to be outputted too, default will create and append to file "anime.txt"
@@ -34,9 +34,7 @@ This version will include bug fixes, improvements, and unit testing.
 
 - [x] Add Changelog
 - [x] Better Readme
-- [] Names for input instead of id only
-- [] Better output file formatting
-- [] scraper that updates for most recent shows
+- [x] Names for input instead of id only
 
 # Contributing
 
