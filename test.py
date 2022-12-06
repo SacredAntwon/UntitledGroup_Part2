@@ -25,7 +25,7 @@ class TestStringMethods(unittest.TestCase):
         print(test)
         print("LENGTH", len(test))
 
-    # Test to see if the json file exists
+    # Test to see if the file exists
     def testFile(self):
         print("Testing to see if the file "
         "exists after generating the article.")
