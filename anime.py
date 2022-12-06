@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-import csv as cv
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import argparse
@@ -33,16 +31,16 @@ def create_soup(x):
 # helper function for recommendation algorithms
 
 
-def get_recs(id, cosine_sim, num, out_list):
+def get_recs(title, cosine_sim, num, out_list):
     text = "The following are recommendations for "
 
     # write to file
     with open(out_list, "a+") as f:
 
         # get the index of the anime that matches the id
-        id2 = '\'' + str(id) + '\''
+        id2 = '\'' + title + '\''
         try:
-            idx = (df.loc[df['Id'] == id2].index[0])
+            idx = (df.loc[df['Anime Title'] == id2].index[0])
         except:
             print("That id does not exist.")
             exit(-1)
@@ -84,12 +82,13 @@ def get_recs(id, cosine_sim, num, out_list):
 def similarity():
     # read csv file into dataframe
     df = pd.read_csv('top_and_bottom_anime.csv')
+    # print(df.shape)
 
     # preprocessing the csv file
     data = range(len(df))
-    for i in data:
-        if df.loc[i]['VAs'] == ' \'\'':
-            df = df.drop(labels=i, axis=0)
+    for title in data:
+        if df.loc[title]['VAs'] == ' \'\'':
+            df = df.drop(labels=title, axis=0)
 
     # make a bag of words csv from database of animes
     df['soup'] = df.apply(create_soup, axis=1)
@@ -112,25 +111,25 @@ if __name__ == "__main__":
     # reading in arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--number_of_recs', type=int, default=10)
-    parser.add_argument('--anime_id', type=int)
+    parser.add_argument('--anime_title', type=str)
     parser.add_argument('--in_list')
     parser.add_argument('--out_list', default="anime.txt")
     args = parser.parse_args()
 
-    if (args.anime_id or args.in_list):
+    if args.anime_title or args.in_list:
         cosine_sim2, df = similarity()
 
-        ids = []
+        titles = []
         if args.in_list:
             with open(args.in_list, 'r') as f:
                 for line in f:
                     temp_line = line.split()
-                    for i in temp_line:
-                        ids.append(i)
-            for i in ids:
-                get_recs(i, cosine_sim2, args.number_of_recs, args.out_list)
+                    for name in temp_line:
+                        titles.append(name)
+            for title in titles:
+                get_recs(title, cosine_sim2, args.number_of_recs, args.out_list)
         else:
-            get_recs(args.anime_id, cosine_sim2, args.number_of_recs, args.out_list)
+            get_recs(args.anime_title, cosine_sim2, args.number_of_recs, args.out_list)
     else:
         raise Exception(
             "python ./anime.py --number_of_recs <number> --anime_id <id number> --in_list <input file name> --out_list <output file name>")
