@@ -122,7 +122,7 @@ if __name__ == "__main__":
             for i in ids:
                 get_recs(i, cosine_sim2, args.number_of_recs, args.out_list)
         else:
-            get_recs(args.anime_id, cosine_sim2, args.number_of_recs)
+            get_recs(args.anime_id, cosine_sim2, args.number_of_recs, args.out_list)
     else:
         raise Exception(
             "python ./anime.py --number_of_recs <number> --anime_id <id number> --in_list <input file name> --out_list <output file name>")
