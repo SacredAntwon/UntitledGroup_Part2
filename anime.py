@@ -41,8 +41,8 @@ def get_recs(title, cosine_sim, num, out_list):
         id2 = '\'' + title + '\''
         try:
             idx = (df.loc[df['Anime Title'] == id2].index[0])
-        except:
-            print("That id does not exist.")
+        except IndexError:
+            print(f"The name {title} is not in the anime list!")
             exit(-1)
 
         # find sim score of the inputed anime with all other animes
@@ -53,31 +53,24 @@ def get_recs(title, cosine_sim, num, out_list):
 
         # get recommended animes index
         anime_indices = [i[0] for i in sim_scores]
+
+        out_list = []
+
         if num > 100:
             print('Number of recommendations cannot exceed 100.')
             num = 100
-        for i in range(len(sim_scores)):
-            if i > num:
-                break
-            else:
-                link = "https://myanimelist.net/anime/"
-                temp_id = df.loc[sim_scores[i][0]]["Id"]
-                temp_id = temp_id.replace('\'', '')
-                link += str(temp_id)
+        for i in range(num):
+            link = "https://myanimelist.net/anime/" + str(df.loc[sim_scores[i][0]]["Id"].replace('\'', ''))
+            entry = df['Anime Title'].iloc[anime_indices[i]]
 
-                if i == 0:
-                    text += str(df['Anime Title'].iloc[anime_indices[i]])
-                    print("%s %s" %
-                          (df['Anime Title'].iloc[anime_indices[i]], link))
-                    f.write("%s\n%s %s %s\n" % (
-                        text, df['Anime Title'].iloc[anime_indices[i]], link, sim_scores[i][1].round(4)))
-                else:
-                    print("%s %s" %
-                          (df['Anime Title'].iloc[anime_indices[i]], link))
-                    f.write("%s %s %s\n" % (
-                        df['Anime Title'].iloc[anime_indices[i]], link, sim_scores[i][1].round(4)))
+            out_list.append(entry)
+            if i == 0:
+                text += str(entry)
 
-        return df['Anime Title'].iloc[anime_indices]
+            print(f"{entry} {link}")
+            f.write(f"{entry} {link} {sim_scores[i][1].round(4)}\n")
+
+        return out_list
 
 def similarity():
     # read csv file into dataframe
@@ -129,7 +122,8 @@ if __name__ == "__main__":
             for title in titles:
                 get_recs(title, cosine_sim2, args.number_of_recs, args.out_list)
         else:
-            get_recs(args.anime_title, cosine_sim2, args.number_of_recs, args.out_list)
+            out_list = get_recs(args.anime_title, cosine_sim2, args.number_of_recs, args.out_list)
+            print(out_list)
     else:
         raise Exception(
             "python ./anime.py --number_of_recs <number> --anime_id <id number> --in_list <input file name> --out_list <output file name>")
