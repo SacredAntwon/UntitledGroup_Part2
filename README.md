@@ -3,6 +3,8 @@
 Anime Recommendation System is a Python script that allow users to input an anime title id as indexed in
 our scraped from MAL dataset and give recommendations based on cosine similarity.
 
+This version will include bug fixes, improvements, and unit testing.
+
 # Getting Started
 
 ## Requirements
@@ -54,3 +56,9 @@ Distributed under the GNU General Public License. See License.md for more inform
 
 Kevin Le - kevinle1462@csu.fullerton.edu
 Peter Van - ptreavn@csu.fullerton.edu
+
+Modifying Team:
+
+Anthony Maida - amaida@csu.fullerton.edu
+
+Daniel VanDenEykel - d.vandeneykel@csu.fullerton.edu
