@@ -5,6 +5,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import argparse
 
+
+
 # helper function for creating bag of words
 
 
@@ -77,8 +79,34 @@ def get_recs(id, cosine_sim, num, out_list):
                     f.write("%s %s %s\n" % (
                         df['Anime Title'].iloc[anime_indices[i]], link, sim_scores[i][1].round(4)))
 
-        # return df['Anime Title'].iloc[anime_indices]
+        return df['Anime Title'].iloc[anime_indices]
 
+def similarity():
+    # read csv file into dataframe
+    df = pd.read_csv('top_and_bottom_anime.csv')
+
+    # preprocessing the csv file
+    data = range(len(df))
+    for i in data:
+        if df.loc[i]['VAs'] == ' \'\'':
+            df = df.drop(labels=i, axis=0)
+
+    # make a bag of words csv from database of animes
+    df['soup'] = df.apply(create_soup, axis=1)
+    df.to_csv("anime_soup.csv", index=None)
+
+    # cosine similarity algorithm
+    count = CountVectorizer()
+    count_matrix = count.fit_transform(df['soup'])
+    count_matrix.shape
+
+    cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+    df = df.reset_index()
+
+    return cosine_sim2, df
+
+# read csv file into dataframe
+df = pd.read_csv('top_and_bottom_anime.csv')
 
 if __name__ == "__main__":
     # reading in arguments
@@ -90,27 +118,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if (args.anime_id or args.in_list):
-        # read csv file into dataframe
-        df = pd.read_csv('top_and_bottom_anime.csv')
-        # print(df.shape)
-
-        # preprocessing the csv file
-        data = range(len(df))
-        for i in data:
-            if df.loc[i]['VAs'] == ' \'\'':
-                df = df.drop(labels=i, axis=0)
-
-        # make a bag of words csv from database of animes
-        df['soup'] = df.apply(create_soup, axis=1)
-        df.to_csv("anime_soup.csv", index=None)
-
-        # cosine similarity algorithm
-        count = CountVectorizer()
-        count_matrix = count.fit_transform(df['soup'])
-        count_matrix.shape
-
-        cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
-        df = df.reset_index()
+        cosine_sim2, df = similarity()
 
         ids = []
         if args.in_list:
