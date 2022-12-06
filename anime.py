@@ -1,13 +1,16 @@
+# Licensing: GPL-3.0
+# Modifying Authors: Anthony Maida, Daniel VanDenEykel
+# Contact: amaida@csu.fullerton.edu, d.vandeneykel@csu.fullerton.edu
+#
+# anime.py
+# This is main program for getting recommendations on selected animes.
+
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import argparse
 
-
-
 # helper function for creating bag of words
-
-
 def create_soup(x):
     result = x['Anime Title']
 
@@ -29,8 +32,6 @@ def create_soup(x):
     return result
 
 # helper function for recommendation algorithms
-
-
 def get_recs(title, cosine_sim, num, out_list):
     text = "The following are recommendations for "
 
@@ -72,6 +73,7 @@ def get_recs(title, cosine_sim, num, out_list):
 
         return out_list
 
+# Check the similarities
 def similarity():
     # read csv file into dataframe
     df = pd.read_csv('top_and_bottom_anime.csv')
@@ -123,7 +125,6 @@ if __name__ == "__main__":
                 get_recs(title, cosine_sim2, args.number_of_recs, args.out_list)
         else:
             out_list = get_recs(args.anime_title, cosine_sim2, args.number_of_recs, args.out_list)
-            print(out_list)
     else:
         raise Exception(
-            "python ./anime.py --number_of_recs <number> --anime_id <id number> --in_list <input file name> --out_list <output file name>")
+            "python ./anime.py --number_of_recs <number> --anime_title <anime title> --in_list <input file name> --out_list <output file name>")

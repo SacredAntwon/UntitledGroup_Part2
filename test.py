@@ -1,5 +1,5 @@
-# Licensing:
-# Authors: Anthony Maida, Daniel VanDenEykel
+# Licensing: GPL-3.0
+# Modifying Authors: Anthony Maida, Daniel VanDenEykel
 # Contact: amaida@csu.fullerton.edu, d.vandeneykel@csu.fullerton.edu
 #
 # test.py
@@ -18,12 +18,11 @@ class TestStringMethods(unittest.TestCase):
     def testRelatedShows(self):
         print("Testing number of related shows.")
         cosine_sim2, df = anime.similarity()
-        id = 33206
+        title = "86"
         num = 3
         out_list = "test.txt"
-        test = anime.get_recs(id, cosine_sim2, num, out_list)
-        print(test)
-        print("LENGTH", len(test))
+        test = anime.get_recs(title, cosine_sim2, num, out_list)
+        self.assertEqual(num, len(test))
 
     # Test to see if the file exists
     def testFile(self):
@@ -31,7 +30,7 @@ class TestStringMethods(unittest.TestCase):
         "exists after generating the article.")
         cosine_sim2, df = anime.similarity()
         fileName = "testFile.txt"
-        test = anime.get_recs(33206, cosine_sim2, 1, fileName)
+        test = anime.get_recs("86", cosine_sim2, 1, fileName)
         path = pl.Path(fileName)
         self.assertEqual((str(path), path.is_file()), (str(path), True))
 
